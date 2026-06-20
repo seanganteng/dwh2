@@ -82,7 +82,6 @@ Dataset mencakup **100.000+ order** dari tahun 2016–2018 dengan informasi leng
 ```
 
 ---
----
 
 ## 📐 Skema Database Lengkap
 
@@ -230,9 +229,6 @@ CREATE TABLE fakta_seller (
 </details>
 
 ---
-
----
-
 ## 📊 Fitur Dashboard
 
 <div align="center">
