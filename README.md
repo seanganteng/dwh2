@@ -48,21 +48,21 @@ Dataset mencakup **100.000+ order** dari tahun 2016–2018 dengan informasi leng
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    DATA SOURCES                          │
-│     DB: brazilian_ecommerce (PostgreSQL via dblink)      │
+│                    DATA SOURCES                         │
+│     DB: brazilian_ecommerce (PostgreSQL via dblink)     │
 │   orders · customers · sellers · products · payments    │
 └────────────────────────┬────────────────────────────────┘
                          │
                          ▼
 ┌─────────────────────────────────────────────────────────┐
-│                   ETL PROCESS                            │
+│                   ETL PROCESS                           │
 │         Extract (dblink) → Transform → Load             │
 │              PHP Scripts + Data Cleansing               │
 └────────────────────────┬────────────────────────────────┘
                          │
                          ▼
 ┌─────────────────────────────────────────────────────────┐
-│           DATA WAREHOUSE (PostgreSQL + dblink)           │
+│           DATA WAREHOUSE (PostgreSQL + dblink)          │
 │                                                         │
 │  DIMENSION TABLES          FACT TABLES                  │
 │  ─────────────────         ────────────────────         │
@@ -75,9 +75,9 @@ Dataset mencakup **100.000+ order** dari tahun 2016–2018 dengan informasi leng
                          │
                          ▼
 ┌─────────────────────────────────────────────────────────┐
-│              PRESENTATION LAYER                          │
-│            PHP + CSS Dashboard                           │
-│   📊 Charts · 📋 Tables · 🗺️ Maps · 📈 Reports          │
+│              PRESENTATION LAYER                         │
+│            PHP + CSS Dashboard                          │
+│   📊 Charts · 📋 Tables · 🗺️ Maps · 📈 Reports        │
 └─────────────────────────────────────────────────────────┘
 ```
 
