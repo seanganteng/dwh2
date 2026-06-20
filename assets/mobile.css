@@ -1,0 +1,166 @@
+/* =====================================================================
+   mobile.css
+   File TAMBAHAN (baru) — TIDAK mengubah style.css atau file lain.
+   Tujuan: membuat dashboard lebih nyaman dibuka di HP (mobile) tanpa
+   mengubah tampilan/kode yang sudah ada di desktop.
+   Cukup di-load SETELAH style.css.
+   ===================================================================== */
+
+/* Cegah scroll horizontal tak sengaja di seluruh halaman pada HP */
+@media (max-width: 768px) {
+    html, body {
+        overflow-x: hidden;
+        max-width: 100%;
+    }
+
+    body.p-4 {
+        padding: 1rem !important;
+    }
+
+    .container,
+    .container-fluid {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h4 {
+        font-size: 1.15rem;
+    }
+
+    h5.card-title {
+        font-size: 1rem;
+    }
+
+    /* Form filter (tahun / top_by / bulan) agar tombol tidak mepet/menumpuk */
+    form.row.g-3 .col-auto {
+        width: 100%;
+    }
+
+    form.row.g-3 .col-auto .btn,
+    form.row.g-3 .col-auto a.btn {
+        width: 100%;
+        margin-bottom: 0.4rem;
+    }
+
+    /* Tombol di header halaman prediktif & perbandingan agar full width di HP */
+    .d-flex.justify-content-between.align-items-start.mb-4 {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+
+    .d-flex.justify-content-between.align-items-start.mb-4 .btn {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    /* Chart agar tidak terlalu pendek/terpotong di layar kecil */
+    .chart-wrap {
+        min-height: 230px !important;
+    }
+
+    /* Peta Leaflet menyesuaikan tinggi agar tidak kepanjangan di HP */
+    #map {
+        height: 320px !important;
+    }
+
+    /* Tombol Pelanggan/Seller di atas peta dibuat full width & sejajar rapi */
+    #mapTitle + div {
+        display: flex;
+        gap: 0.4rem;
+    }
+
+    #mapTitle + div .btn {
+        flex: 1;
+    }
+
+    /* Dropdown metric seller (yang tadinya width: 220px inline) jadi full width */
+    div[style*="width: 220px"] {
+        width: 100% !important;
+        margin-top: 0.5rem;
+    }
+
+    /* Header dengan judul + dropdown di kartu "Top 10 Seller" jadi menumpuk rapi */
+    .d-flex.justify-content-between.align-items-center.mb-3 {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 0.5rem;
+    }
+
+    /* Tabel mini (prediktif.php) tetap bisa discroll horizontal jika sempit */
+    .mini-table {
+        font-size: 0.78rem;
+    }
+
+    /* Box kode query (perbandingan.php) agar tidak melebar memaksa body scroll */
+    .code-box {
+        font-size: 0.74rem;
+    }
+
+    /* Label breakdown di perbandingan.php agar tidak terlalu lebar di HP */
+    .breakdown-row .breakdown-label {
+        width: 90px !important;
+        font-size: 0.74rem;
+    }
+
+    .breakdown-row .breakdown-val {
+        width: 64px !important;
+        font-size: 0.72rem;
+    }
+
+    /* KPI angka besar sedikit dikecilkan supaya tidak turun baris aneh */
+    .kpi h3 {
+        font-size: 1.05rem;
+    }
+
+    .stat-card .stat-value {
+        font-size: 1.4rem;
+    }
+}
+
+/* Tablet kecil (antara HP besar dan tablet) */
+@media (max-width: 576px) {
+    .kpi h3 {
+        font-size: 1rem;
+    }
+
+    .stat-card .stat-value {
+        font-size: 1.2rem;
+    }
+
+    .marker-badge {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+}
+
+/* Pastikan semua tabel (termasuk yang belum dibungkus .table-responsive)
+   tetap aman di-scroll secara horizontal di HP tanpa mendorong body */
+@media (max-width: 768px) {
+    table.table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table.table thead,
+    table.table tbody,
+    table.table tr {
+        display: table;
+        width: 100%;
+        table-layout: auto;
+    }
+}
+
+/* Gambar/ikon emoji besar di judul agar tidak membuat baris terlalu tinggi di HP */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.3rem;
+        line-height: 1.3;
+    }
+}
