@@ -33,33 +33,14 @@ Dataset mencakup **100.000+ order** dari tahun 2016–2018 dengan informasi leng
 
 <div align="center">
 
-| No | Nama | NIM | Peran |
-|:--:|------|-----|-------|
-| 1 | **Destian Junaidi** | 20241000003 | 🛠️ Database Architect |
-| 2 | **M. Rasya Harjanto L** | 2024100068 | 📊 ETL Engineer |
-| 3 | **Seanmichael Ferdian** | 2024100028 | 🎨 Frontend Developer |
-| 4 | **Khanti Sudhanta Yaputra** | 2024100005 | 📈 Data Analyst |
+| No | Nama | NIM |
+|:--:|------|-----|
+| 1 | **Destian Junaidi** | 2024100003 |
+| 2 | **M. Rasya Harjanto L** | 2024100068 |
+| 3 | **Seanmichael Ferdian** | 2024100028 |
+| 4 | **Khanti Sudhanta Yaputra** | 2024100005 |
 
 </div>
-
----
-
-## 🗂️ Struktur Dataset (Olist)
-
-Dataset terdiri dari beberapa tabel yang saling berelasi:
-
-```
-olist_dataset/
-├── 📦 orders.csv                              # Data pesanan utama
-├── 👤 customers.csv                           # Data pelanggan
-├── 🏪 sellers.csv                             # Data penjual
-├── 🛍️  products.csv                            # Data produk
-├── 📋 order_items.csv                         # Item dalam pesanan
-├── 💳 order_payments.csv                      # Data pembayaran
-├── ⭐ order_reviews.csv                       # Ulasan pelanggan
-├── 🌍 geolocation.csv                         # Data geolokasi
-└── 🏷️  product_category_name_translation.csv  # Terjemahan kategori
-```
 
 ---
 
@@ -101,42 +82,6 @@ olist_dataset/
 ```
 
 ---
-
-## ⭐ Star Schema
-
-```
-                        ┌─────────────────────┐
-                        │     dim_waktu        │
-                        │─────────────────────│
-                        │ waktu_id (PK) SERIAL │
-                        │ tanggal DATE         │
-                        │ hari INT             │
-                        │ bulan INT            │
-                        │ tahun INT            │
-                        └──────────┬──────────┘
-                                   │
-          ┌──────────────┐         │         ┌──────────────────────┐
-          │ dim_pelanggan│         │         │     dim_produk       │
-          │──────────────│         │         │──────────────────────│
-          │pelanggan_key ├─────────┤         │ produk_key (PK)      │
-          │pelanggan_id  │         │         │ produk_id            │
-          │kota          │    ┌────┴──────┐  │ kategori             │
-          │state         │    │  FAKTA *  │  │ kategori_inggris     │
-          └──────────────┘    │───────────│  │ panjang              │
-                              │ waktu_id  │  │ berat                │
-          ┌──────────────┐    │pelanggan  ├──┘──────────────────────┘
-          │  dim_seller  │    │seller_key │
-          │──────────────│    │produk_key │  ┌────────────────────────┐
-          │ seller_key   ├────│metode_key │  │  dim_metode_pembayaran │
-          │ seller_id    │    │ measures  │  │────────────────────────│
-          │ kota         │    └───────────┘  │ metode_key (PK)        │
-          │ state        │                   │ metode_pembayaran      │
-          └──────────────┘                   └────────────────────────┘
-
-  * fakta: fakta_penjualan · fakta_pengiriman · fakta_pembayaran
-           fakta_review · fakta_seller
-```
-
 ---
 
 ## 📐 Skema Database Lengkap
@@ -286,77 +231,6 @@ CREATE TABLE fakta_seller (
 
 ---
 
-## 🚀 Cara Menjalankan Proyek
-
-### Prasyarat
-
-Pastikan sudah terinstall:
-- ✅ PHP >= 7.4 (dengan ekstensi `php-pgsql`)
-- ✅ PostgreSQL >= 13
-- ✅ Apache / XAMPP / WAMP
-- ✅ Extension `dblink` untuk PostgreSQL
-
-### Langkah Instalasi
-
-**1. Clone Repository**
-```bash
-git clone https://github.com/kelompok4/brazilian-ecommerce-dw.git
-cd brazilian-ecommerce-dw
-```
-
-**2. Siapkan Database Sumber**
-```bash
-# Buat database sumber (data mentah Olist)
-psql -U postgres -c "CREATE DATABASE brazilian_ecommerce;"
-
-# Import data mentah CSV ke database sumber
-psql -U postgres -d brazilian_ecommerce -f database/staging.sql
-```
-
-**3. Buat Database Data Warehouse**
-```bash
-# Buat database data warehouse
-psql -U postgres -c "CREATE DATABASE olist_dw;"
-
-# Aktifkan extension dblink
-psql -U postgres -d olist_dw -c "CREATE EXTENSION IF NOT EXISTS dblink;"
-
-# Buat skema star schema
-psql -U postgres -d olist_dw -f database/schema.sql
-```
-
-**4. Jalankan Proses ETL**
-```bash
-# Load semua dimension & fact table via dblink
-psql -U postgres -d olist_dw -f database/etl_dimensions.sql
-psql -U postgres -d olist_dw -f database/etl_facts.sql
-```
-
-**5. Konfigurasi Koneksi PHP**
-```php
-// config/database.php
-<?php
-define('DB_HOST', 'localhost');
-define('DB_PORT', '5432');
-define('DB_USER', 'postgres');
-define('DB_PASS', 'root');
-define('DB_NAME', 'olist_dw');
-
-$dsn = "pgsql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME;
-$pdo = new PDO($dsn, DB_USER, DB_PASS);
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-?>
-```
-
-**6. Jalankan Aplikasi**
-```bash
-# Pindahkan ke folder htdocs (XAMPP)
-cp -r . /xampp/htdocs/olist-dw
-
-# Akses melalui browser
-http://localhost/olist-dw
-```
-
 ---
 
 ## 📊 Fitur Dashboard
@@ -394,120 +268,14 @@ http://localhost/olist-dw
 
 ---
 
-## 📁 Struktur Folder
-
-```
-brazilian-ecommerce-dw/
-│
-├── 📂 assets/
-│   ├── css/                  # Stylesheet utama
-│   ├── js/                   # Script Chart.js & interaksi
-│   └── img/                  # Gambar & ikon
-│
-├── 📂 config/
-│   └── database.php          # Konfigurasi koneksi PostgreSQL
-│
-├── 📂 database/
-│   ├── staging.sql           # Import data mentah Olist
-│   ├── schema.sql            # DDL star schema (dim + fakta)
-│   ├── etl_dimensions.sql    # INSERT dimension via dblink
-│   └── etl_facts.sql         # INSERT fact tables via dblink
-│
-├── 📂 pages/
-│   ├── dashboard.php         # Halaman utama
-│   ├── penjualan.php         # Analisis fakta_penjualan
-│   ├── pengiriman.php        # Analisis fakta_pengiriman
-│   ├── pembayaran.php        # Analisis fakta_pembayaran
-│   ├── review.php            # Analisis fakta_review
-│   └── seller.php            # Analisis fakta_seller
-│
-├── 📂 includes/
-│   ├── header.php            # Header global
-│   ├── footer.php            # Footer global
-│   └── navbar.php            # Navigasi
-│
-├── index.php                 # Entry point
-└── README.md                 # Dokumentasi ini
-```
-
----
-
-## 📈 Contoh Query Analitik
-
-```sql
--- Total Penjualan per Bulan
-SELECT
-    dw.tahun,
-    dw.bulan,
-    COUNT(fp.id)       AS total_transaksi,
-    SUM(fp.total_harga) AS total_revenue
-FROM fakta_penjualan fp
-JOIN dim_waktu dw ON fp.waktu_id = dw.waktu_id
-GROUP BY dw.tahun, dw.bulan
-ORDER BY dw.tahun, dw.bulan;
-
--- Top 10 Kategori Produk Berdasarkan Revenue
-SELECT
-    dp.kategori_inggris,
-    SUM(fp.jumlah)      AS total_item_terjual,
-    SUM(fp.total_harga) AS total_revenue
-FROM fakta_penjualan fp
-JOIN dim_produk dp ON fp.produk_key = dp.produk_key
-GROUP BY dp.kategori_inggris
-ORDER BY total_revenue DESC
-LIMIT 10;
-
--- Rata-rata Durasi Pengiriman per State Pelanggan
-SELECT
-    dc.state,
-    ROUND(AVG(fpg.durasi_pengiriman), 1) AS rata_hari_kirim
-FROM fakta_pengiriman fpg
-JOIN dim_pelanggan dc ON fpg.pelanggan_key = dc.pelanggan_key
-GROUP BY dc.state
-ORDER BY rata_hari_kirim ASC;
-
--- Distribusi Metode Pembayaran
-SELECT
-    dmp.metode_pembayaran,
-    COUNT(*)               AS total_transaksi,
-    SUM(fp.total_bayar)    AS total_nilai
-FROM fakta_pembayaran fp
-JOIN dim_metode_pembayaran dmp ON fp.metode_key = dmp.metode_key
-GROUP BY dmp.metode_pembayaran
-ORDER BY total_transaksi DESC;
-
--- Rata-rata Skor Review per Kategori Produk
-SELECT
-    dp.kategori_inggris,
-    ROUND(AVG(fr.skor_review), 2) AS avg_review,
-    COUNT(fr.id)                  AS total_review
-FROM fakta_review fr
-JOIN dim_produk dp ON fr.produk_key = dp.produk_key
-GROUP BY dp.kategori_inggris
-ORDER BY avg_review DESC;
-```
-
----
-
-## 🧪 Insight Utama
-
-- 🏙️ **São Paulo** adalah state dengan volume transaksi tertinggi
-- 💳 **Kartu Kredit** menjadi metode pembayaran paling dominan
-- 📦 Rata-rata durasi pengiriman berkisar antara **7–12 hari**
-- ⭐ Rata-rata skor review pelanggan berada di angka **4.1 / 5.0**
-- 📈 Puncak penjualan terjadi di periode **November** (Black Friday)
-- 🔗 ETL menggunakan **dblink** langsung antar database PostgreSQL
-
----
-
 ## 🤝 Kontribusi
 
 Proyek ini merupakan tugas akademik **Kelompok 4** — Program Studi Sistem Informasi.
 
 ```
 Mata Kuliah  : Data Warehouse
-Institusi    : [Nama Universitas]
-Tahun        : 2024
+Institusi    : Universitas Buddhi Dharma Tangerang
+Tahun        : 2026
 ```
 
 ---
