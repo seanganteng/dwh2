@@ -1,15 +1,13 @@
 <?php
-function getPDOForDb(string $db): PDO
+function getPDO(): PDO
 {
-    // Ubah pengaturan ini sesuai lingkungan Anda
+    // Update these settings for your environment
     $host = getenv('PGHOST');
     $port = getenv('PGPORT');
     $user = getenv('PGUSER');
     $pass = getenv('PGPASSWORD');
     $db   = getenv('PGDATABASE');
-    
-$dsn = "pgsql:host=$host;port=$port;dbname=$db";
-    
+
     $dsn = "pgsql:host={$host};port={$port};dbname={$db}";
 
     try {
@@ -19,20 +17,10 @@ $dsn = "pgsql:host=$host;port=$port;dbname=$db";
         ]);
         return $pdo;
     } catch (PDOException $e) {
-        // Tampilkan halaman error sederhana jika koneksi gagal
+        // Simple error page
         http_response_code(500);
-        echo "<h1>Database connection error to {$db}</h1>";
+        echo "<h1>Database connection error</h1>";
         echo "<pre>" . htmlspecialchars($e->getMessage()) . "</pre>";
         exit;
     }
-}
-
-function getPDO(): PDO
-{
-    return getPDOForDb('db_dwh3');
-}
-
-function getOltpPDO(): PDO
-{
-    return getPDOForDb('db_dwh3_oltp');
 }
