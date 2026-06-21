@@ -12,10 +12,11 @@ function getPDOOltp(): PDO
 
 function getPDOConnection(string $db): PDO
 {
-    $host = 'localhost';
-    $port = 5432;
-    $user = 'postgres';
-    $pass = '141206';
+    $host = getenv('PGHOST');
+    $port = getenv('PGPORT');
+    $user = getenv('PGUSER');
+    $pass = getenv('PGPASSWORD');
+    $db   = getenv('PGDATABASE');
 
     $dsn = "pgsql:host={$host};port={$port};dbname={$db}";
 
